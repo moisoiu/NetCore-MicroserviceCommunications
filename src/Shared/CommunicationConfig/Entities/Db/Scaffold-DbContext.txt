@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "Server=localhost;Database=Configuration;User Id=#{mssql-username}#;Password=#{mssql-Password}#;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir MSSQL -force
