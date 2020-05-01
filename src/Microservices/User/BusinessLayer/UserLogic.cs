@@ -27,14 +27,14 @@ namespace User.BusinessLayer
             this.context = context;
         }
 
-        public async Task<ICollection<GetUserResponse>> GetUsers(UserDto request)
+        public Task<List<GetUserResponse>> GetUsers(UserDto request)
         {
             var firstName = request.FirstName;
             var lastName = request.LastName;
             var account = request.Account;
             var email = request.Email;
 
-            return await context
+            return context
                 .User
                 .AsNoTracking()
                 .ConditionalWhere(!string.IsNullOrEmpty(firstName), x => x.FirstName == firstName)
@@ -45,9 +45,9 @@ namespace User.BusinessLayer
                 .ToListAsync();
         }
 
-        public async Task<T> GetUser<T>(Guid id) where T : class
+        public Task<T> GetUser<T>(Guid id) where T : class
         {
-            return await context
+            return context
                 .User
                 .ConditionalWhere(id != Guid.Empty, x => x.Id == id)
                 .ProjectTo<T>(mapper.ConfigurationProvider)
@@ -59,7 +59,6 @@ namespace User.BusinessLayer
         {
             var user = mapper.Map<Entities.User>(command);
             user.Id = Guid.NewGuid();
-
             var salt = GetSalt();
 
             user.Salt = salt;
@@ -89,18 +88,9 @@ namespace User.BusinessLayer
             return true;
         }
 
-        public async Task<T> GetUser<T>(string account) where T : class
+        public Task<T> GetUser<T>(Expression<Func<Entities.User, bool>> predicate) where T : class
         {
-            return await context
-                .User
-                .ConditionalWhere(!string.IsNullOrEmpty(account), x => x.Account == account)
-                .ProjectTo<T>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<T> GetUser<T>(Expression<Func<Entities.User, bool>> predicate) where T : class
-        {
-            return await context
+            return context
               .User
               .Where(predicate)
               .ProjectTo<T>(mapper.ConfigurationProvider)
@@ -114,15 +104,11 @@ namespace User.BusinessLayer
                 .User
                 .FirstOrDefaultAsync(x => x.Account == account);
 
-            if(user == null)
+            if(user == null && 
+                user.Password != GeneratePassword(password, user.Salt))
             {
                 return false;
-            }
-
-            if(user.Password != GeneratePassword(password, user.Salt))
-            {
-                return false;
-            }
+            }            
 
             return true;            
         }
