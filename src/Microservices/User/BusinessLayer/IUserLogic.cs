@@ -11,7 +11,7 @@ namespace User.BusinessLayer
     public interface IUserLogic
     {
         Task<Guid> SaveUser(CreateUserCommand command);
-        Task<ICollection<GetUserResponse>> GetUsers(UserDto request);
+        Task<List<GetUserResponse>> GetUsers(UserDto request);
         Task<T> GetUser<T>(Expression<Func<Entities.User, bool>> predicate) where T : class;
 
         Task<bool> UpdateUser(Guid userId, JsonPatchDocument jsonPatchDocument);

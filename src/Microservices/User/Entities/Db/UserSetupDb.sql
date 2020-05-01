@@ -1,6 +1,6 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [User]    Script Date: 12.04.2020 18:29:17 ******/
+/****** Object:  Database [User]    Script Date: 01.05.2020 20:14:38 ******/
 CREATE DATABASE [User]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -79,7 +79,7 @@ ALTER DATABASE [User] SET QUERY_STORE = OFF
 GO
 USE [User]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 12.04.2020 18:29:17 ******/
+/****** Object:  Table [dbo].[User]    Script Date: 01.05.2020 20:14:38 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -91,13 +91,18 @@ CREATE TABLE [dbo].[User](
 	[Email] [nvarchar](50) NOT NULL,
 	[Account] [nvarchar](25) NOT NULL,
 	[Password] [nvarchar](100) NOT NULL,
-	[Salt] [nvarchar](100) NOT NULL,
+	[Salt] [varbinary](50) NOT NULL,
 	[RowVersion] [timestamp] NOT NULL,
+	[IsActive] [bit] NOT NULL,
  CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+INSERT [dbo].[User] ([Id], [FirstName], [LastName], [Email], [Account], [Password], [Salt], [IsActive]) VALUES (N'66d557a5-51d9-4e59-8813-9720a5e720bb', N'Mircea', N'Moisoiu', N'moisoiumircea@yahoo.com', N'mm00001', N'W9AX9EtWFnEuFAVk+VsA9IFQFqz/J264GqdRGiSY7wc=', 0x757CFFFC6E495EA016D29985A89E0218, 0)
+GO
+ALTER TABLE [dbo].[User] ADD  CONSTRAINT [DF_User_IsActive]  DEFAULT ((0)) FOR [IsActive]
 GO
 USE [master]
 GO

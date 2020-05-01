@@ -32,7 +32,7 @@ namespace Infrastructure.Middlewares
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var statusCode = HttpStatusCode.InternalServerError;
 
@@ -64,13 +64,10 @@ namespace Infrastructure.Middlewares
 
             }
 
-
-
             context.Response.Clear();
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(exception));
-
+            return context.Response.WriteAsync(JsonConvert.SerializeObject(exception));
         }
     }
 }
