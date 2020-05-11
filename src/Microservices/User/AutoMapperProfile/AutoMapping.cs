@@ -21,7 +21,9 @@ namespace User.AutoMapperProfile
 
             CreateMap<Entities.User, Entities.User>();
 
-            CreateMap<CreateUserCommand, Entities.User>();
+            CreateMap<CreateUserCommand, Entities.User>()
+                .ForMember(x => x.FirstName, x => x.MapFrom(x => x.FirstName.Trim()))
+                .ForMember(x => x.LastName, x => x.MapFrom(x => x.LastName.Trim()));
         }
     }
 }

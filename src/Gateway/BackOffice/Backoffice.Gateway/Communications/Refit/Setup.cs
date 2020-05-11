@@ -22,6 +22,13 @@ namespace Backoffice.Gateway.Communications.Refit
                     c.BaseAddress = new Uri(appSettingsOption.RefitUrls.UserApi);
 
                 });
+
+            services.AddRefitClient<IPatientApi>(settings)
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(appSettingsOption.RefitUrls.PatientApi);
+
+                });
         }
     }
 }

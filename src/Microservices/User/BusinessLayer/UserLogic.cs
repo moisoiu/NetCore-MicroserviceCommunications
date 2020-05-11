@@ -43,17 +43,7 @@ namespace User.BusinessLayer
                 .ConditionalWhere(!string.IsNullOrEmpty(email), x => x.Email == email)
                 .ProjectTo<GetUserResponse>(mapper.ConfigurationProvider)
                 .ToListAsync();
-        }
-
-        public Task<T> GetUser<T>(Guid id) where T : class
-        {
-            return context
-                .User
-                .ConditionalWhere(id != Guid.Empty, x => x.Id == id)
-                .ProjectTo<T>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync();
-
-        }
+        }      
 
         public async Task<Guid> SaveUser(CreateUserCommand command)
         {
@@ -74,9 +64,9 @@ namespace User.BusinessLayer
 
         public async Task<bool> UpdateUser(Guid userId, JsonPatchDocument jsonPatchDocument)
         {
-            var user = context
+            var user = await context
                 .User
-                .FirstOrDefault(x => x.Id == userId);
+                .FirstOrDefaultAsync(x => x.Id == userId);
 
             jsonPatchDocument.ApplyTo(user);
 
