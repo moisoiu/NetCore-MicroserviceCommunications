@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace User
+namespace Patient
 {
     public class Program
     {
@@ -44,7 +44,7 @@ namespace User
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostContext, builder) =>
                 {
-                    if(hostContext.HostingEnvironment.IsDevelopment())
+                    if (hostContext.HostingEnvironment.IsDevelopment())
                     {
                         builder.AddUserSecrets<Program>();
                     }

@@ -23,13 +23,15 @@ namespace User.Identity
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
+            var user = await userLogic.GetUser<Entities.User>(x => x.Account == context.UserName.Trim());
+
             if (!await userLogic.VerifyUserLogin(context.UserName.Trim(), context.Password))
             {
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
                 return;
             }
 
-            context.Result = new GrantValidationResult(context.UserName, OidcConstants.AuthenticationMethods.Password);
+            context.Result = new GrantValidationResult(context.UserName, OidcConstants.AuthenticationMethods.Password);            
         }
     }
 }

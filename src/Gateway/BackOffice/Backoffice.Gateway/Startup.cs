@@ -20,6 +20,7 @@ using IdentityServer4.AccessTokenValidation;
 using DTO.Configuration;
 using FluentValidation.AspNetCore;
 using DTO.User;
+using AutoMapper;
 
 namespace Backoffice.Gateway
 {
@@ -53,6 +54,8 @@ namespace Backoffice.Gateway
 
 
             SetupCommunicationMode(services);
+
+            services.AddAutoMapper(typeof(Startup));
 
 
         }

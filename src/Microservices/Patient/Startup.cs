@@ -1,21 +1,26 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using CommunicationConfig;
 using CommunicationConfig.Enums;
-using DTO.User;
+using DTO.Patient;
 using FluentValidation.AspNetCore;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using User.BusinessLayer;
-using User.Entities;
-using User.Identity;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Patient.BusinessLayer;
+using Patient.Entities;
 
-namespace User
+namespace Patient
 {
     public class Startup
     {
@@ -29,52 +34,38 @@ namespace User
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //https://vmsdurano.com/apiboilerplate-and-identityserver4-access-control-for-apis/
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryApiResources(ResourceManager.Apis())
-                .AddInMemoryClients(ClientManager.Clients())
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-                .AddProfileService<ProfileService>();
-
-
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<PatientContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("User"));
+                options.UseSqlServer(Configuration.GetConnectionString("Patient"));
             },
-           ServiceLifetime.Transient);
+            ServiceLifetime.Transient);
 
             services.AddControllers()
                  .AddNewtonsoftJson()
                  .AddFluentValidation(config =>
                  {
-                     config.RegisterValidatorsFromAssemblyContaining<CreateUserCommand>();
+                     config.RegisterValidatorsFromAssemblyContaining<CreatePatientCommand>();
                      config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                      config.ImplicitlyValidateChildProperties = true;
                  });
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddTransient<IUserLogic, UserLogic>();
+            services.AddTransient<IPatientLogic, PatientLogic>();
 
             SetupCommunicationMode(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
-        {
+        {            
             app.UseErrorHandling();
-
-            app.UseIdentityServer();
 
             app.UseRouting();
 
-            app.UseAuthorization();
-            app.UseAuthentication();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();                
+                endpoints.MapControllers();
 
                 endpoints.MapGet("/", async context =>
                 {

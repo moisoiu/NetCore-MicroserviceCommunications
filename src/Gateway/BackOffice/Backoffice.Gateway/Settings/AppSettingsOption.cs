@@ -13,5 +13,6 @@ namespace Backoffice.Gateway
     public class RefitUrls
     {
         public string UserApi { get; set; }
+        public string PatientApi { get; set; }
     }
 }

@@ -26,16 +26,13 @@ namespace Backoffice.Gateway.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserApi userApi;
-        private readonly IConfiguration configuration;
         private readonly Settings settings;
 
         public UsersController(
             IUserApi userApi,
-            IConfiguration configuration,
             Settings settings)
         {
-            this.userApi = userApi;
-            this.configuration = configuration;
+            this.userApi = userApi;            
             this.settings = settings;
         }
 
@@ -131,12 +128,11 @@ namespace Backoffice.Gateway.Controllers
         }
 
         [HttpPost]
-        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Post([FromBody]CreateUserRequest command)
+        public async Task<IActionResult> Post([FromBody]CreateUserRequest request)
         {
-            var userCreateResponse = await userApi.SaveUser(command);
+            var userCreateResponse = await userApi.SaveUser(request);
 
             var userCreateContent = await userCreateResponse.Content.ConvertStringContentAsJson<string>();
 
