@@ -13,6 +13,8 @@ namespace DTO.Configuration
     public class RefitUrls
     {
         public string UserApi { get; set; }
+        public string PatientApi { get; set; }
+        public string ClinicApi { get; set; }
     }
 
     public class AuthenticationServer
