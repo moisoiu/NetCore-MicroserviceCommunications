@@ -2,36 +2,30 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Patient.Entities
+namespace Clinic.Entities
 {
-    public partial class PatientContext : DbContext
+    public partial class ClinicContext : DbContext
     {
-        public PatientContext()
+        public ClinicContext()
         {
         }
 
-        public PatientContext(DbContextOptions<PatientContext> options)
+        public ClinicContext(DbContextOptions<ClinicContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Patient> Patient { get; set; }
+        public virtual DbSet<Clinic> Clinic { get; set; }      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Patient>(entity =>
+            modelBuilder.Entity<Clinic>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Created).HasColumnType("datetime");
 
-                entity.Property(e => e.DateOfBirth).HasColumnType("date");
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.LastName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
 

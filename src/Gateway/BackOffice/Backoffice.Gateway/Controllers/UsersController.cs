@@ -159,7 +159,6 @@ namespace Backoffice.Gateway.Controllers
             }
 
             return NoContent(); // Because theoretically the user on frontend already has the data changed, no point in returning a new data 
-
         }
     }
 }

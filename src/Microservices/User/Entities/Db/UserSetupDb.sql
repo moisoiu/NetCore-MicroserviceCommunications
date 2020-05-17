@@ -100,7 +100,7 @@ CREATE TABLE [dbo].[User](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-INSERT [dbo].[User] ([Id], [FirstName], [LastName], [Email], [Account], [Password], [Salt], [IsActive]) VALUES (N'66d557a5-51d9-4e59-8813-9720a5e720bb', N'Mircea', N'Moisoiu', N'moisoiumircea@yahoo.com', N'mm00001', N'W9AX9EtWFnEuFAVk+VsA9IFQFqz/J264GqdRGiSY7wc=', 0x757CFFFC6E495EA016D29985A89E0218, 0)
+INSERT [dbo].[User] ([Id], [FirstName], [LastName], [Email], [Account], [Password], [Salt], [IsActive]) VALUES (N'66d557a5-51d9-4e59-8813-9720a5e720bb', N'Mircea', N'Moisoiu', N'moisoiumircea@yahoo.com', N'mm00001', N'W9AX9EtWFnEuFAVk+VsA9IFQFqz/J264GqdRGiSY7wc=', 0x757CFFFC6E495EA016D29985A89E0218, 1)
 GO
 ALTER TABLE [dbo].[User] ADD  CONSTRAINT [DF_User_IsActive]  DEFAULT ((0)) FOR [IsActive]
 GO

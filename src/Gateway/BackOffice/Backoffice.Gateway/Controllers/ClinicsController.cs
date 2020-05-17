@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Backoffice.Gateway.Communications.Refit;
-using Backoffice.Gateway.Models.Patient;
-using DTO.Patient;
+using Backoffice.Gateway.Models.Clinic;
+using DTO.Clinic;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace Backoffice.Gateway.Controllers
@@ -17,62 +17,61 @@ namespace Backoffice.Gateway.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class PatientsController : ControllerBase
+    public class ClinicsController : ControllerBase
     {
-        private readonly IPatientApi patientApi;
+        private readonly IClinicApi clinicApi;
         private readonly IMapper mapper;
-        public PatientsController(
-            IPatientApi patientApi,
+        public ClinicsController(
+            IClinicApi clinicApi,
             IMapper mapper)
         {
-            this.patientApi = patientApi;
+            this.clinicApi = clinicApi;
             this.mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPatients([FromQuery]GetPatientsRequest request)
+        public async Task<IActionResult> GetClinics([FromQuery]GetClinicsRequest request)
         {
-            var patientsRequest = await patientApi.GetPatients(request);
+            var clinicsRequest = await clinicApi.GetClinics(request);
 
-            if (!patientsRequest.IsSuccessStatusCode)
+            if (!clinicsRequest.IsSuccessStatusCode)
             {
-                return await patientsRequest.GetActionResult();
+                return await clinicsRequest.GetActionResult();
             }
 
-            var patients = await patientsRequest.Content.ConvertStringContentAsJson<IEnumerable<GetPatientResponse>>();
+            var clinics = await clinicsRequest.Content.ConvertStringContentAsJson<IEnumerable<GetClinicResponse>>();
 
-
-            return Ok(patients);
+            return Ok(clinics);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetPatientById([FromRoute]Guid id)
+        public async Task<IActionResult> GetClinicById([FromRoute]Guid id)
         {
-            var patientRequest = await patientApi.GetPatient(id);
+            var clinicRequest = await clinicApi.GetClinic(id);
 
-            if (!patientRequest.IsSuccessStatusCode)
+            if (!clinicRequest.IsSuccessStatusCode)
             {
                 return NotFound();
             }
 
-            var patient = await patientRequest.Content.ConvertStringContentAsJson<GetPatientResponse>();
+            var clinic = await clinicRequest.Content.ConvertStringContentAsJson<GetClinicResponse>();
 
-            return Ok(patient);
+            return Ok(clinic);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Post([FromBody]CreatePatientRequest request)
+        public async Task<IActionResult> Post([FromBody]CreateClinicRequest request)
         {
-            var patientCommand = mapper.Map<CreatePatientCommand>(request);
-            patientCommand.CreatedBy = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "id").Value);
+            var clientCommand = mapper.Map<CreateClinicCommand>(request);
+            clientCommand.CreatedBy = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "id").Value);
 
-            var patientCreateResponse = await patientApi.SavePatient(patientCommand);
+            var patientCreateResponse = await clinicApi.SaveClinic(clientCommand);
 
             var patientCreateContent = await patientCreateResponse.Content.ConvertStringContentAsJson<string>();
 
@@ -81,19 +80,19 @@ namespace Backoffice.Gateway.Controllers
                 return BadRequest(patientCreateContent);
             }
 
-            return CreatedAtAction(nameof(GetPatientById), new { id = patientCreateContent }, patientCreateContent);
+            return CreatedAtAction(nameof(GetClinicById), new { id = patientCreateContent }, patientCreateContent);
         }
 
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Patch([FromRoute]Guid id, [FromBody]UpdatePatientRequest patchUser)
+        public async Task<IActionResult> Patch([FromRoute]Guid id, [FromBody]UpdateClinicRequest patchClinic)
         {
-            var patch = JsonPatchDocumentExtensions.CreatePatch(patchUser.Original, patchUser.Changed);
+            var patch = JsonPatchDocumentExtensions.CreatePatch(patchClinic.Original, patchClinic.Changed);
 
             var guidUSerId = Guid.NewGuid();
 
-            var patchResponse = await patientApi.PatchPatient(id, guidUSerId, patch.Operations);
+            var patchResponse = await clinicApi.PatchClinics(id, guidUSerId, patch.Operations);
 
             if (!patchResponse.IsSuccessStatusCode)
             {

@@ -11,13 +11,10 @@ namespace Backoffice.Gateway.Models.Patient
     {
     }
 
-    public class CreatePatientRequestValidator : AbstractValidator<CreatePatientCommand>
+    public class CreatePatientRequestValidator : AbstractValidator<CreatePatientRequest>
     {
         public CreatePatientRequestValidator()
         {
-            RuleFor(x => x.CreatedBy)
-               .NotEmpty();
-
             RuleFor(x => x.DateOfBirth)
                 .NotEmpty();
 

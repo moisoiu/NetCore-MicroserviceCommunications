@@ -1,21 +1,26 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
+using Clinic.BusinessLayer;
+using Clinic.Entities;
 using CommunicationConfig;
 using CommunicationConfig.Enums;
-using DTO.User;
+using DTO.Clinic;
 using FluentValidation.AspNetCore;
 using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using User.BusinessLayer;
-using User.Entities;
-using User.Identity;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace User
+namespace Clinic
 {
     public class Startup
     {
@@ -29,33 +34,24 @@ namespace User
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //https://vmsdurano.com/apiboilerplate-and-identityserver4-access-control-for-apis/
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryApiResources(ResourceManager.Apis())
-                .AddInMemoryClients(ClientManager.Clients())
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-                .AddProfileService<ProfileService>();
-
-
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<ClinicContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("User"));
+                options.UseSqlServer(Configuration.GetConnectionString("Clinic"));
             },
-           ServiceLifetime.Transient);
+             ServiceLifetime.Transient);
 
             services.AddControllers()
                  .AddNewtonsoftJson()
                  .AddFluentValidation(config =>
                  {
-                     config.RegisterValidatorsFromAssemblyContaining<CreateUserCommand>();
+                     config.RegisterValidatorsFromAssemblyContaining<CreateClinicCommand>();
                      config.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                      config.ImplicitlyValidateChildProperties = true;
                  });
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddTransient<IUserLogic, UserLogic>();
+            services.AddTransient<IClinicLogic, ClinicLogic>();
 
             SetupCommunicationMode(services);
         }
@@ -65,20 +61,15 @@ namespace User
         {
             app.UseErrorHandling();
 
-            app.UseIdentityServer();
-
             app.UseRouting();
-
-            app.UseAuthorization();
-            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();                
+                endpoints.MapControllers();
 
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("User Domain - Up & Running");
+                    await context.Response.WriteAsync("Clinic Domain - Up & Running");
                 });
             });
         }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Backoffice.Gateway.Models.Clinic;
 using Backoffice.Gateway.Models.Patient;
+using DTO.Clinic;
 using DTO.Patient;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace Backoffice.Gateway.AutoMapperProfile
         public AutoMapping()
         {
             CreateMap<CreatePatientRequest, CreatePatientCommand>();
+            CreateMap<CreateClinicRequest, CreateClinicCommand>();
         }
 
     }

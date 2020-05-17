@@ -20,7 +20,6 @@ namespace DTO.User
 
             RuleFor(x => x.Original)
                 .SetValidator(new UserDtoValidator());
-
         }
     }
 }
