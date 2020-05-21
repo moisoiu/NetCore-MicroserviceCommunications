@@ -1,6 +1,6 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Patient]    Script Date: 17.05.2020 18:51:37 ******/
+/****** Object:  Database [Patient]    Script Date: 17.05.2020 21:37:31 ******/
 CREATE DATABASE [Patient]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -79,7 +79,7 @@ ALTER DATABASE [Patient] SET QUERY_STORE = OFF
 GO
 USE [Patient]
 GO
-/****** Object:  Table [dbo].[Patient]    Script Date: 17.05.2020 18:51:37 ******/
+/****** Object:  Table [dbo].[Patient]    Script Date: 17.05.2020 21:37:31 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -93,7 +93,7 @@ CREATE TABLE [dbo].[Patient](
 	[Created] [datetime] NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[Updated] [datetime] NOT NULL,
-	[UpdateBy] [uniqueidentifier] NOT NULL,
+	[UpdatedBy] [uniqueidentifier] NOT NULL,
 	[RowVersion] [timestamp] NOT NULL,
  CONSTRAINT [PK_Patient] PRIMARY KEY CLUSTERED 
 (

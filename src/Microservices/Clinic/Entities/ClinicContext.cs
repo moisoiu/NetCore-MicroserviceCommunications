@@ -15,8 +15,8 @@ namespace Clinic.Entities
         {
         }
 
-        public virtual DbSet<Clinic> Clinic { get; set; }      
-
+        public virtual DbSet<Clinic> Clinic { get; set; }
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Clinic>(entity =>

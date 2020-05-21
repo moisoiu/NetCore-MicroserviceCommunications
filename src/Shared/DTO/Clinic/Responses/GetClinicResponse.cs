@@ -4,7 +4,8 @@ using System.Text;
 
 namespace DTO.Clinic
 {
-    public class GetClinicResponse
+    public class GetClinicResponse : ClinicDto
     {
+        public Guid Id { get; set; }
     }
 }

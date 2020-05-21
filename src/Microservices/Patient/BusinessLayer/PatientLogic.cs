@@ -56,7 +56,7 @@ namespace Patient.BusinessLayer
             patient.Created = DateTime.UtcNow;
             patient.CreatedBy = command.CreatedBy;
             patient.Updated = DateTime.UtcNow;
-            patient.UpdateBy = command.CreatedBy;
+            patient.UpdatedBy = command.CreatedBy;
 
             await context.Patient.AddAsync(patient);
             var rowChanged = await context.SaveChangesAsync();
@@ -75,7 +75,7 @@ namespace Patient.BusinessLayer
 
             jsonPatchDocument.ApplyTo(patient);
 
-            patient.UpdateBy = userId;
+            patient.UpdatedBy = userId;
             patient.Updated = DateTime.UtcNow;
 
             context.Patient.Update(patient);

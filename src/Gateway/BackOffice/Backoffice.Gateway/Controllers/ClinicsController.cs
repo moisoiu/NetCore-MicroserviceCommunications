@@ -41,7 +41,7 @@ namespace Backoffice.Gateway.Controllers
                 return await clinicsRequest.GetActionResult();
             }
 
-            var clinics = await clinicsRequest.Content.ConvertStringContentAsJson<IEnumerable<GetClinicResponse>>();
+            var clinics = await clinicsRequest.Content.DeserializeStringContent<IEnumerable<GetClinicResponse>>();
 
             return Ok(clinics);
         }
@@ -58,7 +58,7 @@ namespace Backoffice.Gateway.Controllers
                 return NotFound();
             }
 
-            var clinic = await clinicRequest.Content.ConvertStringContentAsJson<GetClinicResponse>();
+            var clinic = await clinicRequest.Content.DeserializeStringContent<GetClinicResponse>();
 
             return Ok(clinic);
         }
@@ -68,19 +68,19 @@ namespace Backoffice.Gateway.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Post([FromBody]CreateClinicRequest request)
         {
-            var clientCommand = mapper.Map<CreateClinicCommand>(request);
-            clientCommand.CreatedBy = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "id").Value);
+            var clinicCommand = mapper.Map<CreateClinicCommand>(request);
+            clinicCommand.CreatedBy = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "id").Value);
 
-            var patientCreateResponse = await clinicApi.SaveClinic(clientCommand);
+            var clinicCreateResponse = await clinicApi.SaveClinic(clinicCommand);
 
-            var patientCreateContent = await patientCreateResponse.Content.ConvertStringContentAsJson<string>();
+            var clinicCreateContent = await clinicCreateResponse.Content.DeserializeStringContent<string>();
 
-            if (!patientCreateResponse.IsSuccessStatusCode)
+            if (!clinicCreateResponse.IsSuccessStatusCode)
             {
-                return BadRequest(patientCreateContent);
+                return BadRequest(clinicCreateContent);
             }
 
-            return CreatedAtAction(nameof(GetClinicById), new { id = patientCreateContent }, patientCreateContent);
+            return CreatedAtAction(nameof(GetClinicById), new { id = clinicCreateContent }, clinicCreateContent);
         }
 
         [HttpPatch("{id}")]
@@ -90,9 +90,9 @@ namespace Backoffice.Gateway.Controllers
         {
             var patch = JsonPatchDocumentExtensions.CreatePatch(patchClinic.Original, patchClinic.Changed);
 
-            var guidUSerId = Guid.NewGuid();
+            var guidUserId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "id").Value);
 
-            var patchResponse = await clinicApi.PatchClinics(id, guidUSerId, patch.Operations);
+            var patchResponse = await clinicApi.PatchClinics(id, guidUserId, patch.Operations);
 
             if (!patchResponse.IsSuccessStatusCode)
             {

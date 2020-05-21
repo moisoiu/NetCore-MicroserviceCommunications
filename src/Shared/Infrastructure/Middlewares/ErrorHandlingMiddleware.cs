@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Serilog;
@@ -24,6 +25,7 @@ namespace Infrastructure.Middlewares
         {
             try
             {
+                context.Request.EnableBuffering();
                 await next(context);
             }
             catch (Exception ex)
@@ -36,7 +38,15 @@ namespace Infrastructure.Middlewares
         {
             var statusCode = HttpStatusCode.InternalServerError;
 
-          
+            string serverRequest = string.Empty;
+            if (context.Request.Method != "GET")
+            {
+                var stream = new StreamReader(context.Request.Body);
+                stream.BaseStream.Seek(0, SeekOrigin.Begin);
+                serverRequest = stream.ReadToEnd();
+            }
+
+
             switch (exception)
             {
                 case DbUpdateConcurrencyException ex:
@@ -50,13 +60,13 @@ namespace Infrastructure.Middlewares
 
             if(logger.IsEnabled(Serilog.Events.LogEventLevel.Verbose))
             {
-                string serverRequest = string.Empty;
-                if (context.Request.Method != "GET")
-                {
-                    var stream = new StreamReader(context.Request.Body);
-                    stream.BaseStream.Seek(0, SeekOrigin.Begin);
-                    serverRequest = stream.ReadToEnd();
-                }
+                //string serverRequest = string.Empty;
+                //if (context.Request.Method != "GET")
+                //{
+                //    var stream = new StreamReader(context.Request.Body);
+                //    stream.BaseStream.Seek(0, SeekOrigin.Begin);
+                //    serverRequest = stream.ReadToEnd();
+                //}
 
                 LogContext.PushProperty("HTTPMethod", context.Request.Method);
                 LogContext.PushProperty("RequestBody", context.Request.Path.HasValue && context.Request.Path.Value.Contains("login") ? "Login Exception" : serverRequest);

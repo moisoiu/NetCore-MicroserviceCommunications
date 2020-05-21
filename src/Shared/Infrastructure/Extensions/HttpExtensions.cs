@@ -14,10 +14,13 @@ namespace Infrastructure.Extensions
 {
     public static class HttpExtensions
     {
-        public static async Task<T> ConvertStringContentAsJson<T>(this HttpContent content)
+        public static async Task<T> DeserializeStringContent<T>(this HttpContent content)
         {
             var contentResult = await content.ReadAsStringAsync();
-
+            if(typeof(T) == typeof(string))
+            {
+                return (T)(object)contentResult;
+            }
             return JsonConvert.DeserializeObject<T>(contentResult);
         }
 

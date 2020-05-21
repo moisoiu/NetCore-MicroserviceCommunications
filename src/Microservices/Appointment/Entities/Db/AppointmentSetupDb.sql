@@ -1,0 +1,114 @@
+﻿USE [master]
+GO
+/****** Object:  Database [Appointment]    Script Date: 18.05.2020 23:12:59 ******/
+CREATE DATABASE [Appointment]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'Appointment', FILENAME = N'/var/opt/mssql/data/Appointment.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'Appointment_log', FILENAME = N'/var/opt/mssql/data/Appointment_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+GO
+ALTER DATABASE [Appointment] SET COMPATIBILITY_LEVEL = 140
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Appointment].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Appointment] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [Appointment] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [Appointment] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [Appointment] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [Appointment] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [Appointment] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [Appointment] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [Appointment] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [Appointment] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [Appointment] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [Appointment] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [Appointment] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [Appointment] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [Appointment] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [Appointment] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [Appointment] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [Appointment] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [Appointment] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [Appointment] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [Appointment] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [Appointment] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [Appointment] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [Appointment] SET RECOVERY FULL 
+GO
+ALTER DATABASE [Appointment] SET  MULTI_USER 
+GO
+ALTER DATABASE [Appointment] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [Appointment] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [Appointment] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [Appointment] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [Appointment] SET DELAYED_DURABILITY = DISABLED 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'Appointment', N'ON'
+GO
+ALTER DATABASE [Appointment] SET QUERY_STORE = OFF
+GO
+USE [Appointment]
+GO
+/****** Object:  Table [dbo].[Appointment]    Script Date: 18.05.2020 23:12:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Appointment](
+	[Id] [uniqueidentifier] NOT NULL,
+	[ToClinicId] [uniqueidentifier] NOT NULL,
+	[ToClinicName] [nvarchar](50) NOT NULL,
+	[FromClinicId] [uniqueidentifier] NOT NULL,
+	[FromClinicName] [nvarchar](50) NOT NULL,
+	[PatientId] [uniqueidentifier] NOT NULL,
+	[PatientName] [nvarchar](50) NOT NULL,
+	[StartDate] [datetime] NOT NULL,
+	[EndDate] [datetime] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[Created] [datetime] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[Updated] [datetime] NOT NULL,
+	[UpdatedBy] [uniqueidentifier] NOT NULL,
+	[RowVersion] [timestamp] NOT NULL,
+ CONSTRAINT [PK_Appointment] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Appointment] ADD  CONSTRAINT [DF_Appointment2_IsActive]  DEFAULT ((0)) FOR [IsActive]
+GO
+USE [master]
+GO
+ALTER DATABASE [Appointment] SET  READ_WRITE 
+GO
