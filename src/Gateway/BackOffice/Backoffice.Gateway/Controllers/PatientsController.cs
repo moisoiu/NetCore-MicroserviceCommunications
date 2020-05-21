@@ -41,7 +41,7 @@ namespace Backoffice.Gateway.Controllers
                 return await patientsRequest.GetActionResult();
             }
 
-            var patients = await patientsRequest.Content.ConvertStringContentAsJson<IEnumerable<GetPatientResponse>>();
+            var patients = await patientsRequest.Content.DeserializeStringContent<IEnumerable<GetPatientResponse>>();
 
 
             return Ok(patients);
@@ -59,7 +59,7 @@ namespace Backoffice.Gateway.Controllers
                 return NotFound();
             }
 
-            var patient = await patientRequest.Content.ConvertStringContentAsJson<GetPatientResponse>();
+            var patient = await patientRequest.Content.DeserializeStringContent<GetPatientResponse>();
 
             return Ok(patient);
         }
@@ -74,7 +74,7 @@ namespace Backoffice.Gateway.Controllers
 
             var patientCreateResponse = await patientApi.SavePatient(patientCommand);
 
-            var patientCreateContent = await patientCreateResponse.Content.ConvertStringContentAsJson<string>();
+            var patientCreateContent = await patientCreateResponse.Content.DeserializeStringContent<string>();
 
             if (!patientCreateResponse.IsSuccessStatusCode)
             {
@@ -91,9 +91,9 @@ namespace Backoffice.Gateway.Controllers
         {
             var patch = JsonPatchDocumentExtensions.CreatePatch(patchUser.Original, patchUser.Changed);
 
-            var guidUSerId = Guid.NewGuid();
+            var guidUserId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "id").Value);
 
-            var patchResponse = await patientApi.PatchPatient(id, guidUSerId, patch.Operations);
+            var patchResponse = await patientApi.PatchPatient(id, guidUserId, patch.Operations);
 
             if (!patchResponse.IsSuccessStatusCode)
             {

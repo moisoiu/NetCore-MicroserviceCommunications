@@ -14,7 +14,7 @@ namespace Backoffice.Gateway.Communications.Refit
 
             var settings = new RefitSettings
             {
-
+                
             };
 
             services.AddRefitClient<IUserApi>(settings)
@@ -35,6 +35,20 @@ namespace Backoffice.Gateway.Communications.Refit
                 .ConfigureHttpClient(c =>
                 {
                     c.BaseAddress = new Uri(appSettingsOption.RefitUrls.ClinicApi);
+
+                });
+
+            services.AddRefitClient<IConsultationApi>(settings)
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(appSettingsOption.RefitUrls.ConsultationApi);
+
+                });
+
+            services.AddRefitClient<IAppointmentApi>(settings)
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(appSettingsOption.RefitUrls.AppointmentApi);
 
                 });
         }

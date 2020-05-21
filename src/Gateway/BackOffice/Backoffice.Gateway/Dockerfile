@@ -7,6 +7,9 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Backoffice.Gateway.csproj", ""]
+COPY ["../../../Shared/DTO/DTO.csproj", "../../../Shared/DTO/"]
+COPY ["../../../Shared/Infrastructure/Infrastructure.csproj", "../../../Shared/Infrastructure/"]
+COPY ["../../../Shared/CommunicationConfig/CommunicationConfig.csproj", "../../../Shared/CommunicationConfig/"]
 RUN dotnet restore "./Backoffice.Gateway.csproj"
 COPY . .
 WORKDIR "/src/."

@@ -15,6 +15,8 @@ namespace DTO.Configuration
         public string UserApi { get; set; }
         public string PatientApi { get; set; }
         public string ClinicApi { get; set; }
+        public string ConsultationApi { get; set; }
+        public string AppointmentApi { get; set; }
     }
 
     public class AuthenticationServer

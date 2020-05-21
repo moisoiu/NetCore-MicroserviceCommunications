@@ -39,7 +39,7 @@ namespace Backoffice.Gateway.Controllers
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateUserRequest request)
-        {
+        {   
             var loginPayload = new Dictionary<string, object>();
             loginPayload.AuthenticationPayload(request, settings);
 
@@ -104,7 +104,7 @@ namespace Backoffice.Gateway.Controllers
                 return await usersRequest.GetActionResult();
             }
 
-            var users = await usersRequest.Content.ConvertStringContentAsJson<IEnumerable<GetUserResponse>>();
+            var users = await usersRequest.Content.DeserializeStringContent<IEnumerable<GetUserResponse>>();
 
 
             return Ok(users);
@@ -122,7 +122,7 @@ namespace Backoffice.Gateway.Controllers
                 return NotFound();
             }
 
-            var user = await userRequest.Content.ConvertStringContentAsJson<GetUserResponse>();
+            var user = await userRequest.Content.DeserializeStringContent<GetUserResponse>();
 
             return Ok(user);
         }
@@ -134,7 +134,7 @@ namespace Backoffice.Gateway.Controllers
         {
             var userCreateResponse = await userApi.SaveUser(request);
 
-            var userCreateContent = await userCreateResponse.Content.ConvertStringContentAsJson<string>();
+            var userCreateContent = await userCreateResponse.Content.DeserializeStringContent<string>();
 
             if (!userCreateResponse.IsSuccessStatusCode)
             {

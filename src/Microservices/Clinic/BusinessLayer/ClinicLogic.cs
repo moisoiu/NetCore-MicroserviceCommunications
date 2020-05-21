@@ -49,21 +49,21 @@ namespace Clinic.BusinessLayer
 
         public async Task<Guid> SaveClinic(CreateClinicCommand command)
         {
-            var patient = mapper.Map<Entities.Clinic>(command);
-            patient.Id = Guid.NewGuid();
-            patient.IsActive = true;
-            patient.Created = DateTime.UtcNow;
-            patient.CreatedBy = command.CreatedBy;
-            patient.Updated = DateTime.UtcNow;
-            patient.UpdateBy = command.CreatedBy;
+            var clinic = mapper.Map<Entities.Clinic>(command);
+            clinic.Id = Guid.NewGuid();
+            clinic.IsActive = true;
+            clinic.Created = DateTime.UtcNow;
+            clinic.CreatedBy = command.CreatedBy;
+            clinic.Updated = DateTime.UtcNow;
+            clinic.UpdatedBy = command.CreatedBy;
 
-            await context.Clinic.AddAsync(patient);
+            await context.Clinic.AddAsync(clinic);
             var rowChanged = await context.SaveChangesAsync();
 
             if (rowChanged == 0)
                 return Guid.Empty;
 
-            return patient.Id;
+            return clinic.Id;
         }
 
         public async Task<bool> UpdateClinic(Guid clinicId, Guid userId, JsonPatchDocument jsonPatchDocument)
@@ -74,7 +74,7 @@ namespace Clinic.BusinessLayer
 
             jsonPatchDocument.ApplyTo(clinic);
 
-            clinic.UpdateBy = userId;
+            clinic.UpdatedBy = userId;
             clinic.Updated = DateTime.UtcNow;
 
             context.Clinic.Update(clinic);
