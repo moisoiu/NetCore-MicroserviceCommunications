@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Appointment.BusinessLogic;
@@ -34,9 +35,11 @@ namespace Appointment
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("Appointment");
+
             services.AddDbContext<AppointmentContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Appointment"));
+                options.UseSqlServer(connectionString);
             },
             ServiceLifetime.Transient);
 
@@ -52,6 +55,8 @@ namespace Appointment
             services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<IAppointmentLogic, AppointmentLogic>();
+
+            services.SetupDomainDatabase<AppointmentContext>();
 
             SetupCommunicationMode(services);
         }

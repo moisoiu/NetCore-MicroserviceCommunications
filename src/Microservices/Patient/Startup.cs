@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -34,9 +35,11 @@ namespace Patient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("Patient");
+
             services.AddDbContext<PatientContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Patient"));
+                options.UseSqlServer(connectionString);
             },
             ServiceLifetime.Transient);
 
@@ -53,12 +56,14 @@ namespace Patient
 
             services.AddTransient<IPatientLogic, PatientLogic>();
 
+            services.SetupDomainDatabase<PatientContext>();
+
             SetupCommunicationMode(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
-        {            
+        {
             app.UseErrorHandling();
 
             app.UseRouting();

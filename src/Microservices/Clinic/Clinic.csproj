@@ -15,7 +15,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\CommunicationConfig\CommunicationConfig.csproj" />
+    <ProjectReference Include="..\..\Shared\DTO\DTO.csproj" />
     <ProjectReference Include="..\..\Shared\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Entities\Db\UpdateClinicDb.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Entities\Db\CreateClinicDb.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

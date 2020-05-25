@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
-using DTO.Configuration;
 using Microsoft.AspNetCore.Authentication;
 
 namespace Infrastructure.Extensions

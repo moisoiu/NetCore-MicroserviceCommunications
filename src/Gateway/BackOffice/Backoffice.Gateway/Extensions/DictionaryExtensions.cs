@@ -1,9 +1,10 @@
 ﻿using DTO.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Infrastructure.Extensions
+namespace Backoffice.Gateway.Extensions
 {
     public static class DictionaryExtensions
     {
@@ -34,13 +35,13 @@ namespace Infrastructure.Extensions
         }
 
         public static void AuthenticationPayload(this Dictionary<string, object> dictionary, dynamic request, Settings settings)
-        {   
+        {
             dictionary.Add("grant_type", settings.AuthenticationServer.GrantType);
             dictionary.Add("username", request.Account);
             dictionary.Add("password", request.Password);
             dictionary.Add("scope", string.Join(" ", settings.AuthenticationServer.Scope, "offline_access"));
             dictionary.Add("client_id", settings.AuthenticationServer.ApiName);
-            dictionary.Add("client_secret", settings.AuthenticationServer.Secret);                       
+            dictionary.Add("client_secret", settings.AuthenticationServer.Secret);
         }
     }
 }

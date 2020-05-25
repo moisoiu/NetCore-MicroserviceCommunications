@@ -1,22 +1,15 @@
 ﻿using Backoffice.Gateway.Communications.Refit;
 using DTO.User;
 using Infrastructure.Extensions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mime;
 using System.Threading.Tasks;
 using DTO.Configuration;
 using Backoffice.Gateway.Models.User;
+using Backoffice.Gateway.Extensions;
 
 namespace Backoffice.Gateway.Controllers
 {
